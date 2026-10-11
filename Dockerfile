@@ -1,11 +1,11 @@
 # ---- build stage ----
-FROM python:3.12-slim AS build
+FROM python:3.8-slim AS build
 WORKDIR /build
 COPY app/requirements.txt .
 RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
 # ---- runtime stage ----
-FROM python:3.12-slim
+FROM python:3.8-slim
 ENV PYTHONUNBUFFERED=1 APP_VERSION=dev
 RUN useradd --create-home --uid 10001 appuser
 WORKDIR /app
