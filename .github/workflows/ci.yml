@@ -27,7 +27,7 @@ jobs:
         run: docker build -t demo-app:${{ github.sha }} .
 
       - name: Trivy image scan (fail on HIGH/CRITICAL)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: demo-app:${{ github.sha }}
           severity: HIGH,CRITICAL
