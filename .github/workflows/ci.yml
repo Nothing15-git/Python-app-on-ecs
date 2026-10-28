@@ -12,6 +12,8 @@ permissions:
 env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: demo-app
+  ECS_CLUSTER: demo-cluster
+  ECS_SERVICE: demo-service
 
 jobs:
   test-build-scan:
@@ -69,3 +71,19 @@ jobs:
           docker build -t $IMAGE .
           docker push $IMAGE
           echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
+
+      - name: Render task definition with new image
+        id: render
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: .aws/task-definition.json
+          container-name: demo-app
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy to ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
