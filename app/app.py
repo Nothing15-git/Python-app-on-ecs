@@ -26,7 +26,7 @@ def record_metrics(response):
 
 @app.get("/")
 def index():
-    return jsonify(message="Hello this is tayyab from the ECS demo app and i have build it", version=VERSION)
+    return jsonify(message="Hello this is tayyab from the ECS my python demo app", version=VERSION)
 
 
 @app.get("/health")
